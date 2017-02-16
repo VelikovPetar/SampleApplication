@@ -26,7 +26,7 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "BROADCAST RECEIVED");
         this.context = context;
-        String action = intent.getAction();
+        final String action = intent.getAction();
         if(action.equals(ACTION_PHONE)) {  // Ako e primen broadcast od PHONE
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             // Proveri ja sostojbata na povikot
@@ -51,16 +51,20 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                 Object[] pdus = (Object[]) bundle.get("pdus");
                 if (pdus != null) {
                     Log.d(TAG, "PDUS NOT NULL");
+                    String _phoneNumber = "";
                     for (int i = 0; i < pdus.length; ++i) {
                         Log.d(TAG, "IN FOR LOOP");
                         SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                        String phoneNumber = message.getDisplayOriginatingAddress();
-                        Log.d(TAG, "Incoming message from " + phoneNumber);
+                        _phoneNumber = message.getDisplayOriginatingAddress();
+                        Log.d(TAG, "Incoming message from " + _phoneNumber);
                     }
+                    final String phoneNumber = _phoneNumber;
                     // TODO Zapishi vo baza
                 }
             }
         }
     }
+
+
 
 }

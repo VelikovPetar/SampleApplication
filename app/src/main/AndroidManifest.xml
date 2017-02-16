@@ -32,6 +32,10 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
+        
+        <provider
+            android:authorities="com.example.velik_000.sampleapplication.contentprovider"
+            android:name="com.example.velik_000.sampleapplication.RecordsContentProvider"/>
     </application>
 
 </manifest>
