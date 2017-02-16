@@ -17,7 +17,7 @@ import android.text.TextUtils;
 public class RecordsContentProvider extends ContentProvider {
 
     private static final String AUTHORITY = "com.example.velik_000.sampleapplication.contentprovider";
-    private static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + RecordsTable.RECORDS_TABLE);
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + RecordsTable.RECORDS_TABLE);
     private static final int ALL_RECORDS = 1;
     private static final int SINGLE_RECORD = 2;
     private static final UriMatcher uriMathcer;
@@ -39,6 +39,7 @@ public class RecordsContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase db = database.getReadableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(RecordsTable.RECORDS_TABLE);
         switch(uriMathcer.match(uri)) {
             case ALL_RECORDS:
                 break;
