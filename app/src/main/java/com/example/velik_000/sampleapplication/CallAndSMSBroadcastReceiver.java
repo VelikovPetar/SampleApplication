@@ -36,9 +36,10 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                 @Override
                 public void onCallStateChanged(int state, String incomingNumber) {
                     if(state == TelephonyManager.CALL_STATE_RINGING) {
-                        // TODO Zapishi vo baza
+                        // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
                         // -------------------------------------------------------------------------
-                        Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
+                        // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
+                        Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
                         startServiceIntent.putExtra("type", "write");
                         startServiceIntent.putExtra("info", "Incoming call from: " + incomingNumber);
                         startServiceIntent.putExtra("saved", "not saved");
@@ -65,13 +66,14 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                     for (int i = 0; i < pdus.length; ++i) {
                         Log.d(TAG, "IN FOR LOOP");
                         SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                        phoneNumber = message.getDisplayOriginatingAddress();
+                        phoneNumber = message.getDisplayOriginatingAddress();  // Zemi go isprakjachot
                         Log.d(TAG, "Incoming message from " + phoneNumber);
                     }
                     final String incomingNumber = phoneNumber;
-                    // TODO Zapishi vo baza
+                    // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
                     // -----------------------------------------------------------------------------
-                    Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
+                    // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
+                    Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
                     startServiceIntent.putExtra("type", "write");
                     startServiceIntent.putExtra("info", "Incoming SMS from: " + incomingNumber);
                     startServiceIntent.putExtra("saved", "not saved");
