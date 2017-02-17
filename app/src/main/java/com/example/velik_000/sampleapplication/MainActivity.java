@@ -2,6 +2,8 @@ package com.example.velik_000.sampleapplication;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -25,6 +27,20 @@ public class MainActivity extends Activity {
         int smsPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
         if(phonePermissionCheck != PackageManager.PERMISSION_GRANTED || smsPermissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS},PHONE_SMS_PERMISSION_REQUEST_CODE);
+        }
+
+        ContentValues cv = new ContentValues();
+        cv.put(RecordsTable.COLUMN_INFO, "info");
+        cv.put(RecordsTable.COLUMN_SAVED, "not saved");
+
+        ContentResolver cr = getContentResolver();
+//        cr.insert(RecordsContentProvider.CONTENT_URI, cv);
+//        cr.delete(RecordsContentProvider.CONTENT_URI, RecordsTable.COLUMN_SAVED + " LIKE ?", new String[]{"%%"});
+        Cursor cursor = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO}, null, null, null);
+        if(cursor != null) {
+            Log.d("CURSOR TEST", cursor.getCount() + "");
+        } else {
+            Log.e("CURSOR TEST", "NULL");
         }
     }
 

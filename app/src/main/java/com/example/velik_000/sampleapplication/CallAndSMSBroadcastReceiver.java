@@ -16,6 +16,7 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
     private final String ACTION_PHONE = "android.intent.action.PHONE_STATE";
     private final String ACTION_SMS = "android.provider.Telephony.SMS_RECEIVED";
     final SmsManager sms = SmsManager.getDefault();
+    private static boolean ALREADY_RECEIVED = false;
     private String TAG = "IncBCST";
 
     public CallAndSMSBroadcastReceiver() {
@@ -23,9 +24,10 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         Log.d(TAG, "BROADCAST RECEIVED");
         this.context = context;
+        final Context _context = context;
         final String action = intent.getAction();
         if(action.equals(ACTION_PHONE)) {  // Ako e primen broadcast od PHONE
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -35,12 +37,20 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                 public void onCallStateChanged(int state, String incomingNumber) {
                     if(state == TelephonyManager.CALL_STATE_RINGING) {
                         // TODO Zapishi vo baza
+                        // -------------------------------------------------------------------------
+                        Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
+                        startServiceIntent.putExtra("type", "write");
+                        startServiceIntent.putExtra("info", "Incoming call from: " + incomingNumber);
+                        startServiceIntent.putExtra("saved", "not saved");
+                        context.startService(startServiceIntent);
                         Log.d(TAG, "Incoming call from " + incomingNumber);
-                    } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                        Log.d(TAG, "OFF_HOOK");
-                    } else if(state == TelephonyManager.CALL_STATE_IDLE) {
-                        Log.d(TAG, "IDLE");
+                        // -------------------------------------------------------------------------
                     }
+//                    else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
+//                        Log.d(TAG, "OFF_HOOK");
+//                    } else if(state == TelephonyManager.CALL_STATE_IDLE) {
+//                        Log.d(TAG, "IDLE");
+//                    }
                 }
             }, PhoneStateListener.LISTEN_CALL_STATE);
         } else if(action.equals(ACTION_SMS)) {  // Ako e primen broadcast od SMS
@@ -51,20 +61,25 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                 Object[] pdus = (Object[]) bundle.get("pdus");
                 if (pdus != null) {
                     Log.d(TAG, "PDUS NOT NULL");
-                    String _phoneNumber = "";
+                    String phoneNumber = "";
                     for (int i = 0; i < pdus.length; ++i) {
                         Log.d(TAG, "IN FOR LOOP");
                         SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                        _phoneNumber = message.getDisplayOriginatingAddress();
-                        Log.d(TAG, "Incoming message from " + _phoneNumber);
+                        phoneNumber = message.getDisplayOriginatingAddress();
+                        Log.d(TAG, "Incoming message from " + phoneNumber);
                     }
-                    final String phoneNumber = _phoneNumber;
+                    final String incomingNumber = phoneNumber;
                     // TODO Zapishi vo baza
+                    // -----------------------------------------------------------------------------
+                    Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
+                    startServiceIntent.putExtra("type", "write");
+                    startServiceIntent.putExtra("info", "Incoming SMS from: " + incomingNumber);
+                    startServiceIntent.putExtra("saved", "not saved");
+                    context.startService(startServiceIntent);
+                    // -----------------------------------------------------------------------------
                 }
             }
         }
+        Log.d(TAG, "BROADCAST FINISHED");
     }
-
-
-
 }
