@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.PhoneStateListener;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
@@ -16,7 +15,6 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
     private final String ACTION_PHONE = "android.intent.action.PHONE_STATE";
     private final String ACTION_SMS = "android.provider.Telephony.SMS_RECEIVED";
     final SmsManager sms = SmsManager.getDefault();
-    private static boolean ALREADY_RECEIVED = false;
     private String TAG = "IncBCST";
 
     public CallAndSMSBroadcastReceiver() {
@@ -32,6 +30,9 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
         if(action.equals(ACTION_PHONE)) {  // Ako e primen broadcast od PHONE
             String phoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             if(phoneState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
+                // -----------------------------------------------------------------------------
+                // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
                 Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
                 startServiceIntent.putExtra("type", "write");
                 startServiceIntent.putExtra("info", "Incoming call from: " + intent.getStringExtra("incoming_number"));

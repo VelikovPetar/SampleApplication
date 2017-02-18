@@ -16,10 +16,12 @@ public class RecordsWorkerIntentService extends IntentService {
 
     public RecordsWorkerIntentService() {
         super("Default name");
+        setIntentRedelivery(true);
     }
 
     public RecordsWorkerIntentService(String name) {
         super(name);
+        setIntentRedelivery(true);
     }
 
     @Override
