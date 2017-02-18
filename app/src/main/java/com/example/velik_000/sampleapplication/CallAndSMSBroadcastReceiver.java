@@ -30,30 +30,15 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
         final Context _context = context;
         final String action = intent.getAction();
         if(action.equals(ACTION_PHONE)) {  // Ako e primen broadcast od PHONE
-            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            // Proveri ja sostojbata na povikot
-            tm.listen(new PhoneStateListener(){
-                @Override
-                public void onCallStateChanged(int state, String incomingNumber) {
-                    if(state == TelephonyManager.CALL_STATE_RINGING) {
-                        // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
-                        // -------------------------------------------------------------------------
-                        // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
-                        Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
-                        startServiceIntent.putExtra("type", "write");
-                        startServiceIntent.putExtra("info", "Incoming call from: " + incomingNumber);
-                        startServiceIntent.putExtra("saved", "not saved");
-                        context.startService(startServiceIntent);
-                        Log.d(TAG, "Incoming call from " + incomingNumber);
-                        // -------------------------------------------------------------------------
-                    }
-//                    else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
-//                        Log.d(TAG, "OFF_HOOK");
-//                    } else if(state == TelephonyManager.CALL_STATE_IDLE) {
-//                        Log.d(TAG, "IDLE");
-//                    }
-                }
-            }, PhoneStateListener.LISTEN_CALL_STATE);
+            String phoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+            if(phoneState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
+                startServiceIntent.putExtra("type", "write");
+                startServiceIntent.putExtra("info", "Incoming call from: " + intent.getStringExtra("incoming_number"));
+                startServiceIntent.putExtra("saved", "not saved");
+                context.startService(startServiceIntent);
+                Log.d(TAG, "Incoming call from " + intent.getStringExtra("incoming_number"));
+            }
         } else if(action.equals(ACTION_SMS)) {  // Ako e primen broadcast od SMS
             Log.d(TAG, "INSIDE MSG PART");
             Bundle bundle = intent.getExtras();
