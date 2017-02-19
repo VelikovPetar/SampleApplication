@@ -67,8 +67,8 @@ public class RecordsWorkerIntentService extends IntentService {
                                         .setContentText("Saved records: " + savedRecods.getCount() + "\nNot saved records: " + notSavedRecods.getCount());
                         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         notificationManager.notify(123, notificationBuilder.build());
-                    notSavedRecods.close();
-                    savedRecods.close();
+                        notSavedRecods.close();
+                        savedRecods.close();
                     } else {
                         if(notSavedRecods != null) {
                             notSavedRecods.close();
