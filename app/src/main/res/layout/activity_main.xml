@@ -10,8 +10,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.velik_000.sampleapplication.MainActivity">
 
-    <TextView
+    <Button
+        android:text="Notify Records"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="49dp"
+        android:id="@+id/notify_records_button" />
+
+    <Button
+        android:text="Display Records"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notify_records_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:id="@+id/display_records_button" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/display_records_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="97dp"
+        android:id="@+id/records_list_view" />
 </RelativeLayout>
