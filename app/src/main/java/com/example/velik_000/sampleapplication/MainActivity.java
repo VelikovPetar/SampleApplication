@@ -10,8 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -36,6 +38,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d("LIFE", "Activity onCreate()");
+
         notifyRecordsButton = (Button) findViewById(R.id.notify_records_button);
         notifyRecordsButton.setOnClickListener(new NotifyRecordsButtonHandler());
 
@@ -44,6 +48,11 @@ public class MainActivity extends Activity {
 
         recordsListView = (ListView) findViewById(R.id.records_list_view);
 
+        Object object = getLastNonConfigurationInstance();
+        if(object != null) {
+            Cursor cursor = (Cursor) object;
+            recordsListView.setAdapter(new RecordsCursorAdapter(this, cursor));
+        }
         // Ask for permissions at runtime for Android 6.0+
         int phonePermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
         int smsPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
@@ -67,11 +76,49 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("LIFE", "Activity onStart()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("LIFE", "Activity onResume()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("LIFE", "Activity onPause()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("LIFE", "Activity onStop()");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(cursor != null) {
-            cursor.close();
-        }
+//        if(cursor != null) {
+//            cursor.close();
+//        }
+        Log.d("LIFE", "Activity onDestroy()");
+    }
+
+    // Don't destroy the activity on back-press
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        Log.d("LIFE", "Activity onRetainNonConfigurationInstance()");
+        return cursor;
     }
 
     @Override

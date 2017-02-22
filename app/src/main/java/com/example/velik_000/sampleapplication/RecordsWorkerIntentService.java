@@ -19,6 +19,7 @@ import android.util.Log;
 public class RecordsWorkerIntentService extends IntentService {
 
     private String TAG = "IncBCST";
+    private final int NOTIFICATION_ID = 1234;
 
     public RecordsWorkerIntentService() {
         super("RecordsWorkerIntentService");
@@ -58,8 +59,10 @@ public class RecordsWorkerIntentService extends IntentService {
                 }
                 case "notify": {
                     ContentResolver cr = getContentResolver();
-                    Cursor savedRecords = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, RecordsTable.COLUMN_SAVED + "=?", new String[]{"saved"}, null);
-                    Cursor notSavedRecords = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, RecordsTable.COLUMN_SAVED + "=?", new String[]{"not saved"}, null);
+                    Cursor savedRecords = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED},
+                            RecordsTable.COLUMN_SAVED + "=?", new String[]{"saved"}, null);
+                    Cursor notSavedRecords = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED},
+                            RecordsTable.COLUMN_SAVED + "=?", new String[]{"not saved"}, null);
                     if (notSavedRecords != null && savedRecords != null) {
                         int savedRecordsCount = savedRecords.getCount();
                         int notSavedrecordsCount = notSavedRecords.getCount();
@@ -97,14 +100,16 @@ public class RecordsWorkerIntentService extends IntentService {
 
     private void sendNotification(Context context, int savedRecordsCount, int notSavedRecordsCount) {
         Intent onViewButtonClickIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, onViewButtonClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        onViewButtonClickIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, onViewButtonClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder notificationBuilder
                 = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentTitle("Records")
                 .setContentText("Saved records: " + savedRecordsCount + "\nNot saved records: " + notSavedRecordsCount)
-                .setContentIntent(pendingIntent);
-        notificationManager.notify(123, notificationBuilder.build());
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
     }
 }
