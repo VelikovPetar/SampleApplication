@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private Button notifyRecordsButton;
     private Button displayRecordsButton;
     private ListView recordsListView;
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,14 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(cursor != null) {
+            cursor.close();
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if(requestCode == PHONE_SMS_PERMISSION_REQUEST_CODE) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
@@ -90,7 +99,7 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View v) {
             ContentResolver cr = getContentResolver();
-            Cursor cursor = cr.query(RecordsContentProvider.CONTENT_URI, new String[] {RecordsTable.COLUMN_ID, RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, null, null, null);
+            cursor = cr.query(RecordsContentProvider.CONTENT_URI, new String[] {RecordsTable.COLUMN_ID, RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, null, null, null);
             if(recordsListView.getAdapter() == null) {
                 RecordsCursorAdapter rca = new RecordsCursorAdapter(getApplicationContext(), cursor);
                 recordsListView.setAdapter(rca);

@@ -82,6 +82,7 @@ public class RecordsContentProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
             return Uri.parse(CONTENT_URI + "/" + id);
         }
+        db.close();
         return null;
     }
 
@@ -103,6 +104,7 @@ public class RecordsContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unsupported Uri : " + uri);
         }
         int count = db.delete(RecordsTable.RECORDS_TABLE, selection, selectionArgs);
+        db.close();
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
@@ -125,6 +127,7 @@ public class RecordsContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unsupported Uri : " + uri);
         }
         int count = db.update(RecordsTable.RECORDS_TABLE, values, selection, selectionArgs);
+        db.close();
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
