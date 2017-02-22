@@ -25,7 +25,6 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         Log.d(TAG, "BROADCAST RECEIVED");
         this.context = context;
-        final Context _context = context;
         final String action = intent.getAction();
         if(action.equals(ACTION_PHONE)) {  // Ako e primen broadcast od PHONE
             String phoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
@@ -33,7 +32,7 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                 // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
                 // -----------------------------------------------------------------------------
                 // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
-                Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
+                Intent startServiceIntent = new Intent(context, RecordsWorkerIntentService.class);
                 startServiceIntent.setAction("write");
                 startServiceIntent.putExtra("info", "Incoming call from: " + intent.getStringExtra("incoming_number"));
                 startServiceIntent.putExtra("saved", "not saved");
@@ -59,7 +58,7 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                     // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
                     // -----------------------------------------------------------------------------
                     // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
-                    Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
+                    Intent startServiceIntent = new Intent(context, RecordsWorkerIntentService.class);
                     startServiceIntent.setAction("write");
                     startServiceIntent.putExtra("info", "Incoming SMS from: " + incomingNumber);
                     startServiceIntent.putExtra("saved", "not saved");

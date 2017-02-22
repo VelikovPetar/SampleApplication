@@ -16,8 +16,8 @@ public class RecordsCursorAdapter extends CursorAdapter {
 
     public RecordsCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
-
     }
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.records_list_item, parent, false);
