@@ -51,6 +51,7 @@ public class RecordsContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("unsupported uri : " + uri);
         }
         Cursor cursor = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 

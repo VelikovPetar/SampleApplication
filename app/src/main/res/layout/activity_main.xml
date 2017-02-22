@@ -21,17 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/records_list_view"
-        android:layout_below="@+id/display_records_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="54dp" />
-
-    <Button
-        android:text="Display Records"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/display_records_button"
+        android:layout_marginTop="41dp"
         android:layout_below="@+id/notify_records_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

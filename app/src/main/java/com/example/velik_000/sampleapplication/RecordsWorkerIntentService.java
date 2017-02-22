@@ -1,7 +1,6 @@
 package com.example.velik_000.sampleapplication;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
