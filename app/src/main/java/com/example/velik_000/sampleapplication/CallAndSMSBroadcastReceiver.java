@@ -34,7 +34,7 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                 // -----------------------------------------------------------------------------
                 // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
                 Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
-                startServiceIntent.putExtra("type", "write");
+                startServiceIntent.setAction("write");
                 startServiceIntent.putExtra("info", "Incoming call from: " + intent.getStringExtra("incoming_number"));
                 startServiceIntent.putExtra("saved", "not saved");
                 context.startService(startServiceIntent);
@@ -60,7 +60,7 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                     // -----------------------------------------------------------------------------
                     // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
                     Intent startServiceIntent = new Intent(_context, RecordsWorkerIntentService.class);
-                    startServiceIntent.putExtra("type", "write");
+                    startServiceIntent.setAction("write");
                     startServiceIntent.putExtra("info", "Incoming SMS from: " + incomingNumber);
                     startServiceIntent.putExtra("saved", "not saved");
                     context.startService(startServiceIntent);

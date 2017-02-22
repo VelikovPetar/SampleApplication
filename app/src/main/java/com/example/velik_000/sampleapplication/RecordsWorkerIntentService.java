@@ -37,9 +37,9 @@ public class RecordsWorkerIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "Service started!");
-        String type = intent.getStringExtra("type");
-        if(type != null) {
-            switch (type) {
+        String action = intent.getAction();
+        if(action != null) {
+            switch (action) {
                 case "write": {
                     String info = intent.getStringExtra("info");
                     String saved = intent.getStringExtra("saved");

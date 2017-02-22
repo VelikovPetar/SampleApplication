@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View v) {
             Intent startServiceIntent = new Intent(getApplicationContext(), RecordsWorkerIntentService.class);
-            startServiceIntent.putExtra("type", "notify");
+            startServiceIntent.setAction("notify");
             startService(startServiceIntent);
         }
     }
