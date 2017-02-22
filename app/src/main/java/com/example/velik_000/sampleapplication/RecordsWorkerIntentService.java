@@ -1,7 +1,9 @@
 package com.example.velik_000.sampleapplication;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -56,25 +58,24 @@ public class RecordsWorkerIntentService extends IntentService {
                 }
                 case "notify": {
                     ContentResolver cr = getContentResolver();
-                    Cursor notSavedRecods = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, RecordsTable.COLUMN_SAVED + "=?", new String[]{"not saved"}, null);
-                    Cursor savedRecods = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, RecordsTable.COLUMN_SAVED + "=?", new String[]{"saved"}, null);
-                    if (notSavedRecods != null && savedRecods != null) {
-                        Log.d(TAG, "Saved records: " + savedRecods.getCount() + "\nNot saved records: " + notSavedRecods.getCount());
-                        NotificationCompat.Builder notificationBuilder =
-                                new NotificationCompat.Builder(getApplicationContext())
-                                        .setSmallIcon(R.drawable.notification_icon)
-                                        .setContentTitle("Records")
-                                        .setContentText("Saved records: " + savedRecods.getCount() + "\nNot saved records: " + notSavedRecods.getCount());
-                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.notify(123, notificationBuilder.build());
-                        notSavedRecods.close();
-                        savedRecods.close();
+                    Cursor savedRecords = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, RecordsTable.COLUMN_SAVED + "=?", new String[]{"saved"}, null);
+                    Cursor notSavedRecords = cr.query(RecordsContentProvider.CONTENT_URI, new String[]{RecordsTable.COLUMN_INFO, RecordsTable.COLUMN_SAVED}, RecordsTable.COLUMN_SAVED + "=?", new String[]{"not saved"}, null);
+                    if (notSavedRecords != null && savedRecords != null) {
+                        int savedRecordsCount = savedRecords.getCount();
+                        int notSavedrecordsCount = notSavedRecords.getCount();
+                        Log.d(TAG, "Saved records: " + savedRecords.getCount() + "\nNot saved records: " + notSavedRecords.getCount());
+
+                        // Send notification
+                        sendNotification(this, savedRecordsCount, notSavedrecordsCount);
+
+                        notSavedRecords.close();
+                        savedRecords.close();
                     } else {
-                        if(notSavedRecods != null) {
-                            notSavedRecods.close();
+                        if(notSavedRecords != null) {
+                            notSavedRecords.close();
                         }
-                        if(savedRecods != null) {
-                            savedRecods.close();
+                        if(savedRecords != null) {
+                            savedRecords.close();
                         }
                         Log.d(TAG, "ERROR");
                     }
@@ -92,5 +93,18 @@ public class RecordsWorkerIntentService extends IntentService {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Service destroyed!");
+    }
+
+    private void sendNotification(Context context, int savedRecordsCount, int notSavedRecordsCount) {
+        Intent onViewButtonClickIntent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, onViewButtonClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder notificationBuilder
+                = new NotificationCompat.Builder(getApplicationContext())
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle("Records")
+                .setContentText("Saved records: " + savedRecordsCount + "\nNot saved records: " + notSavedRecordsCount)
+                .setContentIntent(pendingIntent);
+        notificationManager.notify(123, notificationBuilder.build());
     }
 }
