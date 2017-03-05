@@ -74,6 +74,7 @@ public class DisplayDataActivity extends Activity {
     }
 
     //TODO Save data on orientation change(?)
+    //TODO Check for internet connection and display error
     private class SearchByIdButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {
