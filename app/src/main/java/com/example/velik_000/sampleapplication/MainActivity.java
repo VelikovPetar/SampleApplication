@@ -14,26 +14,42 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 
     private final int PHONE_SMS_PERMISSION_REQUEST_CODE = 1;
     private Button notifyRecordsButton;
+    private Button getDataButton;
     private ListView recordsListView;
     private SimpleCursorAdapter sca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        Log.d("LIFE", "Activity onCreate()");
+        Log.d("LIFE", "MAIN Activity onCreate()");
 
         notifyRecordsButton = (Button) findViewById(R.id.notify_records_button);
+        getDataButton = (Button) findViewById(R.id.get_data_button);
         notifyRecordsButton.setOnClickListener(new NotifyRecordsButtonHandler());
+        getDataButton.setOnClickListener(new GetDataButtonHandler());
 
         // Display of all records stored in the base using CursorLoader
         recordsListView = (ListView) findViewById(R.id.records_list_view);
@@ -56,31 +72,31 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("LIFE", "Activity onStart()");
+        Log.d("LIFE", "MAIN Activity onStart()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("LIFE", "Activity onResume()");
+        Log.d("LIFE", "MAIN Activity onResume()");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("LIFE", "Activity onPause()");
+        Log.d("LIFE", "MAIN Activity onPause()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("LIFE", "Activity onStop()");
+        Log.d("LIFE", "MAIN Activity onStop()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("LIFE", "Activity onDestroy()");
+        Log.d("LIFE", "MAIN Activity onDestroy()");
     }
 
     // Don't destroy the activity on back-press
@@ -123,6 +139,14 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
             Intent startServiceIntent = new Intent(getApplicationContext(), RecordsWorkerIntentService.class);
             startServiceIntent.setAction("notify");
             startService(startServiceIntent);
+        }
+    }
+
+    private class GetDataButtonHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), DisplayDataActivity.class);
+            startActivity(intent);
         }
     }
 

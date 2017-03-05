@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <Button
+            android:id="@+id/get_from_api_button"
+            android:text="Search by ID"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+        <EditText
+            android:id="@+id/id_edit_text"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            />
+    </TableRow>
+
+    <TableRow>
+        <ScrollView
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow>
+                    <TextView
+                        android:text="@string/IDVehicle"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_id_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/plate_number"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_plate_number_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/description"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_decription_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/longitudex"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_longitudex_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/latitudey"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_latitudey_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/bearing"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_bearing_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/speed"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_speed_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/vehicle_state"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_vehicle_state_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/vehicle_state_color"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_vehicle_state_color_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/driver"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_driver_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/driver_start"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_driver_start_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/taximeter"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_taximeter_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/last_location"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_last_location_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/stanica"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_stanica_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/region"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_region_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/do_region"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_do_region_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/adresa"
+                        android:textAlignment="textEnd"
+                        android:layout_gravity="end"
+                        android:textSize="16sp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/retrieved_adresa_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                </TableRow>
+
+
+
+            </TableLayout>
+
+        </ScrollView>
+    </TableRow>
+
+</TableLayout>

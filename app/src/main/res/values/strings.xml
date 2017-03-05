@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">SampleApplication</string>
+    <string name="IDVehicle">IdVehicle</string>
+    <string name="plate_number">Plate</string>
+    <string name="description">Description</string>
+    <string name="longitudex">LongitudeX</string>
+    <string name="latitudey">LatitudeY</string>
+    <string name="bearing">Bearing</string>
+    <string name="speed">Speed</string>
+    <string name="vehicle_state">Vehicle State</string>
+    <string name="vehicle_state_color">Vehicle State Color</string>
+    <string name="driver">Driver</string>
+    <string name="driver_start">Driver Start</string>
+    <string name="taximeter">Taximeter</string>
+    <string name="last_location">Last Location</string>
+    <string name="stanica">Stanica</string>
+    <string name="region">Region</string>
+    <string name="do_region">Do region</string>
+    <string name="adresa">Adresa</string>
 </resources>
