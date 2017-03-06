@@ -1,7 +1,15 @@
 package com.example.velik_000.sampleapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -74,12 +82,17 @@ public class DisplayDataActivity extends Activity {
     }
 
     //TODO Save data on orientation change(?)
-    //TODO Check for internet connection and display error
     private class SearchByIdButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            if(!isConnected(getApplicationContext())) {
+                // Notify
+                promptInternetConnection(DisplayDataActivity.this);
+                Toast.makeText(getApplicationContext(), "Not connected!", Toast.LENGTH_LONG).show();
+                return;
+            }
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            String url = "<ENTER URL HERE>";
+            String url = "here_goes_url";
             final TextView textView = (TextView) findViewById(R.id.id_edit_text);
             String id = textView.getText().toString();
             Log.d("VEHICLE API", id);
@@ -91,7 +104,9 @@ public class DisplayDataActivity extends Activity {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        if(response.has("ResponseCode")) {
+                        Log.d("VEHICLE API", response.toString());
+
+                        if(response.isNull("IdVehicle")) {
                             //TODO Fix not existing IDs
                             Toast.makeText(getApplicationContext(), (String) response.get("ResponseDescription"), Toast.LENGTH_LONG).show();
                             textView.setText("");
@@ -160,7 +175,50 @@ public class DisplayDataActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Error during GET", Toast.LENGTH_LONG).show();
                 }
             });
+            jsonObjectRequest.setShouldCache(false); // disable cache for the request
             requestQueue.add(jsonObjectRequest);
+        }
+
+        // Check if device is connected to internet
+        private boolean isConnected(Context context) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if(connectivityManager == null) {
+                return false;
+            }
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnectedOrConnecting();
+        }
+
+        // Prompt the user to connect to the internet
+        private void promptInternetConnection(Context context) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Enable internet connectivity");
+            builder.setMessage("Internet connection is required to perfor this action. Connect via:");
+            builder.setPositiveButton("WiFi", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            // TODO Check for different versions of Android
+            builder.setNeutralButton("Mobile Data", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName(
+                            "com.android.settings",
+                            "com.android.settings.Settings$DataUsageSummaryActivity"));
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.create().show();
         }
     }
 }
