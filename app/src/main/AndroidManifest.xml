@@ -52,6 +52,10 @@
         <service android:name=".RecordsWorkerIntentService">
 
         </service>
+
+        <service android:name=".HttpRequestIntentService">
+
+        </service>
         
         <provider
             android:authorities="com.example.velik_000.sampleapplication.contentprovider"
