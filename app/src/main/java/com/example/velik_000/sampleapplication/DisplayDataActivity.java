@@ -33,6 +33,7 @@ public class DisplayDataActivity extends Activity {
 
     private Button searchByIdButton;
     private EditText enterIdEditText;
+    private String savedJson = "";
     private ResponseBroadcastReceiver responseBroadcastReceiver;
 
     @Override
@@ -47,6 +48,19 @@ public class DisplayDataActivity extends Activity {
         searchByIdButton.setOnClickListener(new SearchByIdButtonHandler());
 
         enterIdEditText = (EditText) findViewById(R.id.id_edit_text);
+
+        // Check if there is saved json string(indicating that there was displayed data before orientation change).
+        // If there is, parse that json and display the data.
+        if(savedInstanceState != null) {
+            if((savedJson = savedInstanceState.getString("json_string")) != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(savedJson);
+                    displayData(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -86,75 +100,143 @@ public class DisplayDataActivity extends Activity {
         Log.d("LIFE", "DISPLAY Activity onDestroy()");
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // If there is data displayed, saved the json representing that data.
+        if(savedJson != null && !savedJson.equals("")) {
+            outState.putString("json_string", savedJson);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void displayData(JSONObject response) throws JSONException {
+        int id = response.getInt("IdVehicle");
+        ((TextView) findViewById(R.id.retrieved_id_text)).setText(id + "");
+
+        String plate = response.getString("Plate");
+        ((TextView) findViewById(R.id.retrieved_plate_number_text)).setText(plate);
+
+        String description = (String) response.get("DescriptionShort");
+        ((TextView) findViewById(R.id.retrieved_decription_text)).setText(description);
+
+        double longitudeX = response.getDouble("LongitudeX");
+        ((TextView) findViewById(R.id.retrieved_longitudex_text)).setText(longitudeX + "");
+
+        double latitudeY = response.getDouble("LatitudeY");
+        ((TextView) findViewById(R.id.retrieved_latitudey_text)).setText(latitudeY + "");
+
+        double bearing = response.getDouble("Bearing");
+        ((TextView) findViewById(R.id.retrieved_bearing_text)).setText(bearing + "");
+
+        String speed = response.getString("Speed");
+        ((TextView) findViewById(R.id.retrieved_speed_text)).setText(speed);
+
+        String vehicleState = response.getString("VehicleState");
+        ((TextView) findViewById(R.id.retrieved_vehicle_state_text)).setText(vehicleState);
+
+        int vehicleStateColor = response.getInt("VehicleStateColor");
+        ((TextView) findViewById(R.id.retrieved_vehicle_state_color_text)).setText(vehicleStateColor + "");
+
+        String driver = response.getString("Driver");
+        ((TextView) findViewById(R.id.retrieved_driver_text)).setText(driver);
+
+        String driverStart = response.getString("DriverStart");
+        ((TextView) findViewById(R.id.retrieved_driver_start_text)).setText(driverStart);
+
+        String taximeter = response.getString("Taximeter");
+        ((TextView) findViewById(R.id.retrieved_taximeter_text)).setText(taximeter);
+
+        String lastLocation = response.getString("LastLocation");
+        ((TextView) findViewById(R.id.retrieved_last_location_text)).setText(lastLocation);
+
+        String stanica = response.getString("Stanica");
+        ((TextView) findViewById(R.id.retrieved_stanica_text)).setText(stanica);
+
+        String region = response.getString("Region");
+        ((TextView) findViewById(R.id.retrieved_region_text)).setText(region);
+
+        String doRegion = response.getString("DoRegion");
+        ((TextView) findViewById(R.id.retrieved_do_region_text)).setText(doRegion);
+
+        String adresa1 = response.getString("Adresa1");
+        ((TextView) findViewById(R.id.retrieved_adresa_text)).setText(adresa1);
+    }
+
     private class ResponseBroadcastReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String json = intent.getStringExtra("json_string");
+            savedJson = json;
             try {
                 JSONObject response = new JSONObject(json);
-                displayData(response);
+//                displayData(response);
+                DisplayDataActivity.this.displayData(response);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d("HTTP_SERVICE", "BAD JSON");
             }
         }
 
-        private void displayData(JSONObject response) throws JSONException {
-            int id = response.getInt("IdVehicle");
-            ((TextView) findViewById(R.id.retrieved_id_text)).setText(id + "");
-
-            String plate = response.getString("Plate");
-            ((TextView) findViewById(R.id.retrieved_plate_number_text)).setText(plate);
-
-            String description = (String) response.get("DescriptionShort");
-            ((TextView) findViewById(R.id.retrieved_decription_text)).setText(description);
-
-            double longitudeX = response.getDouble("LongitudeX");
-            ((TextView) findViewById(R.id.retrieved_longitudex_text)).setText(longitudeX + "");
-
-            double latitudeY = response.getDouble("LatitudeY");
-            ((TextView) findViewById(R.id.retrieved_latitudey_text)).setText(latitudeY + "");
-
-            double bearing = response.getDouble("Bearing");
-            ((TextView) findViewById(R.id.retrieved_bearing_text)).setText(bearing + "");
-
-            String speed = response.getString("Speed");
-            ((TextView) findViewById(R.id.retrieved_speed_text)).setText(speed);
-
-            String vehicleState = response.getString("VehicleState");
-            ((TextView) findViewById(R.id.retrieved_vehicle_state_text)).setText(vehicleState);
-
-            int vehicleStateColor = response.getInt("VehicleStateColor");
-            ((TextView) findViewById(R.id.retrieved_vehicle_state_color_text)).setText(vehicleStateColor + "");
-
-            String driver = response.getString("Driver");
-            ((TextView) findViewById(R.id.retrieved_driver_text)).setText(driver);
-
-            String driverStart = response.getString("DriverStart");
-            ((TextView) findViewById(R.id.retrieved_driver_start_text)).setText(driverStart);
-
-            String taximeter = response.getString("Taximeter");
-            ((TextView) findViewById(R.id.retrieved_taximeter_text)).setText(taximeter);
-
-            String lastLocation = response.getString("LastLocation");
-            ((TextView) findViewById(R.id.retrieved_last_location_text)).setText(lastLocation);
-
-            String stanica = response.getString("Stanica");
-            ((TextView) findViewById(R.id.retrieved_stanica_text)).setText(stanica);
-
-            String region = response.getString("Region");
-            ((TextView) findViewById(R.id.retrieved_region_text)).setText(region);
-
-            String doRegion = response.getString("DoRegion");
-            ((TextView) findViewById(R.id.retrieved_do_region_text)).setText(doRegion);
-
-            String adresa1 = response.getString("Adresa1");
-            ((TextView) findViewById(R.id.retrieved_adresa_text)).setText(adresa1);
-        }
+//        private void displayData(JSONObject response) throws JSONException {
+//            int id = response.getInt("IdVehicle");
+//            ((TextView) findViewById(R.id.retrieved_id_text)).setText(id + "");
+//
+//            String plate = response.getString("Plate");
+//            ((TextView) findViewById(R.id.retrieved_plate_number_text)).setText(plate);
+//
+//            String description = (String) response.get("DescriptionShort");
+//            ((TextView) findViewById(R.id.retrieved_decription_text)).setText(description);
+//
+//            double longitudeX = response.getDouble("LongitudeX");
+//            ((TextView) findViewById(R.id.retrieved_longitudex_text)).setText(longitudeX + "");
+//
+//            double latitudeY = response.getDouble("LatitudeY");
+//            ((TextView) findViewById(R.id.retrieved_latitudey_text)).setText(latitudeY + "");
+//
+//            double bearing = response.getDouble("Bearing");
+//            ((TextView) findViewById(R.id.retrieved_bearing_text)).setText(bearing + "");
+//
+//            String speed = response.getString("Speed");
+//            ((TextView) findViewById(R.id.retrieved_speed_text)).setText(speed);
+//
+//            String vehicleState = response.getString("VehicleState");
+//            ((TextView) findViewById(R.id.retrieved_vehicle_state_text)).setText(vehicleState);
+//
+//            int vehicleStateColor = response.getInt("VehicleStateColor");
+//            ((TextView) findViewById(R.id.retrieved_vehicle_state_color_text)).setText(vehicleStateColor + "");
+//
+//            String driver = response.getString("Driver");
+//            ((TextView) findViewById(R.id.retrieved_driver_text)).setText(driver);
+//
+//            String driverStart = response.getString("DriverStart");
+//            ((TextView) findViewById(R.id.retrieved_driver_start_text)).setText(driverStart);
+//
+//            String taximeter = response.getString("Taximeter");
+//            ((TextView) findViewById(R.id.retrieved_taximeter_text)).setText(taximeter);
+//
+//            String lastLocation = response.getString("LastLocation");
+//            ((TextView) findViewById(R.id.retrieved_last_location_text)).setText(lastLocation);
+//
+//            String stanica = response.getString("Stanica");
+//            ((TextView) findViewById(R.id.retrieved_stanica_text)).setText(stanica);
+//
+//            String region = response.getString("Region");
+//            ((TextView) findViewById(R.id.retrieved_region_text)).setText(region);
+//
+//            String doRegion = response.getString("DoRegion");
+//            ((TextView) findViewById(R.id.retrieved_do_region_text)).setText(doRegion);
+//
+//            String adresa1 = response.getString("Adresa1");
+//            ((TextView) findViewById(R.id.retrieved_adresa_text)).setText(adresa1);
+//        }
     }
 
-    //TODO Save data on orientation change(?)
     private class SearchByIdButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {
