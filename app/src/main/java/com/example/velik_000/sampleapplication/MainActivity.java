@@ -59,6 +59,12 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d("LIFE", "MAIN Activity onNewIntent()");
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         Log.d("LIFE", "MAIN Activity onStart()");

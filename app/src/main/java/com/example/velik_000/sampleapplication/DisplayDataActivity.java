@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
@@ -270,7 +271,7 @@ public class DisplayDataActivity extends Activity {
         private void promptInternetConnection(Context context) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Enable internet connectivity");
-            builder.setMessage("Internet connection is required to perfor this action. Connect via:");
+            builder.setMessage("Internet connection is required to perform this action. Connect via:");
             builder.setPositiveButton("WiFi", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -283,9 +284,14 @@ public class DisplayDataActivity extends Activity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent();
-                    intent.setComponent(new ComponentName(
-                            "com.android.settings",
-                            "com.android.settings.Settings$DataUsageSummaryActivity"));
+                    if(Build.VERSION.SDK_INT <= 15) {
+                        intent = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
+                        intent.setComponent(new ComponentName("com.android.phone","com.android.phone.Settings"));
+                    } else {
+                        intent.setComponent(new ComponentName(
+                                "com.android.settings",
+                                "com.android.settings.Settings$DataUsageSummaryActivity"));
+                    }
                     startActivity(intent);
                 }
             });
