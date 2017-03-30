@@ -31,7 +31,6 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
             if(phoneState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                 // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
                 // -----------------------------------------------------------------------------
-                // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
                 Intent startServiceIntent = new Intent(context, RecordsWorkerIntentService.class);
                 startServiceIntent.setAction("write");
                 startServiceIntent.putExtra("info", "Incoming call from: " + intent.getStringExtra("incoming_number"));
@@ -57,7 +56,6 @@ public class CallAndSMSBroadcastReceiver extends BroadcastReceiver {
                     final String incomingNumber = phoneNumber;
                     // Staruvaj IntentService koj preku ContentResolver -> ContentProvider zapishuva vo baza
                     // -----------------------------------------------------------------------------
-                    // Intent startServiceIntent = new Intent(_context, RecordsWorkerService.class);
                     Intent startServiceIntent = new Intent(context, RecordsWorkerIntentService.class);
                     startServiceIntent.setAction("write");
                     startServiceIntent.putExtra("info", "Incoming SMS from: " + incomingNumber);

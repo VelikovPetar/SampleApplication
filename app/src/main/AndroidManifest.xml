@@ -45,10 +45,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".RecordsWorkerService">
-
-        </service>
-
         <service android:name=".RecordsWorkerIntentService">
 
         </service>
